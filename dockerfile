@@ -4,4 +4,5 @@ RUN apt-get install openssh-server iputils-ping curl iproute2 dnsutils lsof net-
 EXPOSE 22
 RUN useradd daed
 RUN echo daed:s@usages | chpasswd
-ENTRYPOINT ["tail", "-f", "/dev/null"]
+RUN mkdir /var/run/sshd
+CMD ["/usr/sbin/sshd", "-D"]

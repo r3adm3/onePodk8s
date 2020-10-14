@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myservice-fe
+  labels:
+    app: myservice-fe
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: myservice-fe
+  template:
+    metadata:
+      labels:
+        app: myservice-fe
+    spec:
+      containers:
+      - image: nginx
+        name: multiservice-fe
+        ports:
+        - containerPort: 22
+        env: 
+          - name: KUBEENV
+            value: "true"
+          - name: ASPNETCORE_ENVIRONMENT
+            value: "Staging"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: myservice-fe
+  name: myservice-fe
+spec:
+  ports:
+  - nodePort: 30500
+    port: 22
+    protocol: TCP
+    targetPort: 22
+  selector:
+    app: myservice-fe
+  type: NodePort
